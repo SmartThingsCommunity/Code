@@ -16,13 +16,12 @@
 definition(
         name: "Turn on before Sunset",
         namespace: "exmaples",
-        author: "smartthings",
+        author: "SmartThings",
         description: "Turn on lights a number of minutes before sunset, based on your location's geofence",
         category: "My Apps",
         iconUrl: "https://s3.amazonaws.com/smartapp-icons/ModeMagic/rise-and-shine.png",
         iconX2Url: "https://s3.amazonaws.com/smartapp-icons/ModeMagic/rise-and-shine@2x.png",
         iconX3Url: "https://s3.amazonaws.com/smartapp-icons/ModeMagic/rise-and-shine@2x.png")
-
 
 preferences {
     section("Lights") {
@@ -42,7 +41,7 @@ def updated() {
 
 def initialize() {
     subscribe(location, "sunsetTime", sunsetTimeHandler)
-    
+
     //schedule it to run today too
     scheduleTurnOn(location.currentValue("sunsetTime"))
 }
@@ -55,12 +54,12 @@ def sunsetTimeHandler(evt) {
 def scheduleTurnOn(sunsetString) {
     //get the Date value for the string
     def sunsetTime = Date.parse("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", sunsetString)
-    
+
     //calculate the offset
     def timeBeforeSunset = new Date(sunsetTime.time - (offset * 60 * 1000))
-    
+
     log.debug "Scheduling for: $timeBeforeSunset (sunset is $sunsetTime)"
-    
+
     //schedule this to run one time
     runOnce(timeBeforeSunset, turnOn)
 }

@@ -1,7 +1,7 @@
 /**
  *  Turn on by ZIP code
  *
- *  Copyright 2015 Matt Nohr
+ *  Copyright 2015 SmartThings
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at:
@@ -16,13 +16,12 @@
 definition(
         name: "Turn on by ZIP code",
         namespace: "examples",
-        author: "smartthings",
+        author: "SmartThings",
         description: "Turn on lights based on ZIP code",
         category: "My Apps",
         iconUrl: "https://s3.amazonaws.com/smartapp-icons/ModeMagic/rise-and-shine.png",
         iconX2Url: "https://s3.amazonaws.com/smartapp-icons/ModeMagic/rise-and-shine@2x.png",
         iconX3Url: "https://s3.amazonaws.com/smartapp-icons/ModeMagic/rise-and-shine@2x.png")
-
 
 preferences {
     section("Lights") {

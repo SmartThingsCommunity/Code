@@ -6,4 +6,4 @@ A place to host all our code examples.
  - Device Types
  - Arduino Shield
 
-Initially created by @mager and @jimmyjames.
+Initially created by [@mager](http://github.com/mager) and [@jimmyjames](http://github.com/jimmyjames).

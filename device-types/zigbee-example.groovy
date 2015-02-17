@@ -7,19 +7,20 @@
 metadata {
     // Automatically generated. Make future change here.
     definition (name: "CentraLite Switch", namespace: "", author: "SmartThings") {
-Define the device type name, namespace, and author.
 
+//Define the device type name, namespace, and author.
 capability "Actuator"
 capability "Switch"
 capability "Power Meter"
 capability "Configuration"
 capability "Refresh"
 capability "Sensor"
-These are the capabilities that the device can do.
 
+//These are the capabilities that the device can do.
       fingerprint profileId: "0104", inClusters: "0000,0003,0004,0005,0006,0B04,0B05", outClusters: "0019"
 }
-This section defines the device fingerprint
+
+// This section defines the device fingerprint
 
   // simulator metadata
   simulator {
@@ -31,7 +32,8 @@ This section defines the device fingerprint
       reply "zcl on-off on": "on/off: 1"
       reply "zcl on-off off": "on/off: 0"
 }
-This section informs the simulator, for testing of your SmartApp without the actual device. On and off populate a status dropdown. If you choose them, they send the specified message (“on/off: 1”, for example) to the parse method of the Device Type.
+
+//This section informs the simulator, for testing of your SmartApp without the actual device. On and off populate a status dropdown. If you choose them, they send the specified message (“on/off: 1”, for example) to the parse method of the Device Type.
 
     // UI tile definitions
     tiles {

@@ -24,45 +24,96 @@ definition(
     oauth: true)
 
 preferences {
-  section("Allow External Service to Control These Things...") {
-    input "light1", "capability.switch", title: "Pick switch #1", required: false
-  }
+    section("which switches?") {
+        input "theSwitches", "capability.switch", multiple: true
+    }
 }
- 
-
-/* This block defines which functions will fire when you hit certain endpoints. */
 
 mappings {
-  path("/switch") {
+  path("/switches") {
+    // GET requests to /switches endpoint go to listSwitches.
+    // PUT requests go to updateSwitches
     action: [
-      GET: "getSwitch",
-      PUT: "setSwitch"
+      GET: "getSwitches",
+      PUT: "updateSwitches"
+    ]
+  }
+  
+  // GET requests to endpoint /switches/<id> go to getSwitch
+  // PUT requests to endpoint /switches/<id> go to updateSwitch
+  path("/switches/:id") {
+    action: [
+        GET: "getSwitch",
+        PUT: "updateSwitch"
     ]
   }
 }
 
+// return a map in the form of [switchName, switchStatus]
+// the returned value will be converted to JSON by the platform
+def getSwitches() {
+    def status = [:]
+    theSwitches.each {theSwitch ->
+        log.trace "will populate status map"
+        log.trace "theSwitch id: ${theSwitch.id}"
+        status.put(theSwitch.displayName, theSwitch.currentSwitch)
+    }
+    
+    log.debug "listSwitches returning: $status"
+    return status
+}
+
+def getSwitch() {
+    def theSwitch = theSwitches.find{it.id == params.id}
+    [theSwitch.displayName, theSwitch.currentSwitch]
+}
+
+// execute the command specified in the request
+// returns a 400 error if a non-supported command
+// is specified (only on, off, or toggle supported)
+// assumes request body with JSON in format {"command" : "<value>"}
+def updateSwitches() {
+    log.trace "updateSwitches: request: $request"
+    log.trace "updateSwitches: params: $params"
+    
+    theSwitches.each {
+        doCommand(it, request.JSON.command)
+    }
+}
+
+// execute the command specified in the request
+// return a 400 error if a non-supported command 
+// is specified (only on, off, or toggle supported)
+// assumes request body with JSON in format {"command" : "<value>"}
+def updateSwitch() {
+    log.trace "updateSwitch: look for swithc with id ${params.id}"
+    def theSwitch = theSwitches.find{it.id == params.id}
+    doCommand(theSwitch, request.JSON.command)
+}
+
+def doCommand(theSwitch, command) {
+    if (command == "toggle") {
+        if (theSwitch.currentSwitch == "on") {
+            log.debug "will try and turn switch ${theSwitch.displayName} on"
+            theSwitch.off()
+        } else {
+            log.debug "will try and turn switch ${theSwitch.displayName} off"
+            theSwitch.on()
+        }
+    } else if (command == "on" || command == "off") {
+        theSwitch."$command"()
+    } else {
+        httpError(400, "Unsupported command - only 'toggle', 'off', and 'on' supported")
+    }
+}
+
+// called when SmartApp is installed
 def installed() {
     log.debug "Installed with settings: ${settings}"
 }
 
+// called when any preferences are changed in this SmartApp. 
 def updated() {
     log.debug "Updated with settings: ${settings}"
-}
-
-def getSwitch() {
-    light1.currentState("switch")
-}
-
-def setSwitch($evt) {
-    log.debug "The event: " + request.JSON.value
-    
-    if (request.JSON.value == "on") {
-        light1.on()
-    }
-    else if (request.JSON.value == "off") {
-        light1.off()
-    }
-    else {
-        log.error "Invalid value: $request.JSON.value"
-    }
+    unsubscribe()
 }

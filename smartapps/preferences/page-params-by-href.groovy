@@ -13,7 +13,7 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
- definition(
+definition(
     name: "href params example",
     namespace: "smartthings",
     author: "SmartThings",
@@ -44,11 +44,13 @@ def firstPage() {
     ]
     
     dynamicPage(name: "firstPage", uninstall: true) {
-        /* The href element accepts a key of `params` and expects a `Map` as the value.
-         * Anything passed in `params` will be sent along with the request but will not be persisted in any way.
-         * The params will be used going to the next page but will not be available when backing out of that page.
-         * This, combined with the fact that pages refresh when navigating back to them, means that your params will not be
-         * available if your user hits the back button. */
+        /* 
+        *  The href element accepts a key of `params` and expects a `Map` as the value.
+        *  Anything passed in `params` will be sent along with the request but will not be persisted in any way.
+        *  The params will be used going to the next page but will not be available when backing out of that page.
+        *  This, combined with the fact that pages refresh when navigating back to them, means that your params will not be
+        *  available if your user hits the back button.
+        */
         section {        
             href(
                 name: "toSecondPage", 
@@ -57,18 +59,20 @@ def firstPage() {
                 description: "includes params: ${hrefParams}",
                 state: hrefState()
             )
-         }
-     }
- }
+        }
+    }
+}
 
- def secondPage(params) {
-    /* firstPage included `params` in the href element that navigated to here. 
+def secondPage(params) {
+     /* 
+     * firstPage included `params` in the href element that navigated to here. 
      * You must specify some variable name in the method declaration. (I used 'params' here, but it can be any variable name you want).
-     * If you do not specify a variable name, there is no way to get the params that you specified in your `href` element. */
+     * If you do not specify a variable name, there is no way to get the params that you specified in your `href` element. 
+     */
 
-     log.debug "params: ${params}"
+    log.debug "params: ${params}"
 
-     dynamicPage(name: "secondPage", uninstall: true, install: params?.install) {
+    dynamicPage(name: "secondPage", uninstall: true, install: params?.install) {
         if (params.nextPage) {
             section {
                 href(
@@ -78,23 +82,24 @@ def firstPage() {
                     state: hrefState()
                 )
             }
-            } else {
-                section {
-                    paragraph "There were no params included when fetching this page."
-                }
-            }
-        }
-    }
-
-    def thirdPage() {
-        state.reachedThirdPage = true
-
-        dynamicPage(name: "thirdPage") {
+        } else {
             section {
-                image "https://placekitten.com/g/600/500"
+                paragraph "There were no params included when fetching this page."
             }
         }
     }
+}
+
+def thirdPage() {
+
+    state.reachedThirdPage = true
+
+    dynamicPage(name: "thirdPage") {
+        section {
+            image "https://placekitten.com/g/600/500"
+        }
+    }
+}
 
 // ========================================================
 // HELPERS
@@ -107,11 +112,13 @@ def checkSomeCustomLogic() {
 }
 
 def hrefState() {
-    /* `state: "complete"` makes the right side of the href green. 
+    /* 
+     * `state: "complete"` makes the right side of the href green. 
      * It's a great way to show the user that they've already set up some stuff on that page. 
      * In other words, it's a great way to show state ;) 
-     * If you're using hrefs, it's a good idea to set `state` when appropriate. */
-    hrefState.reachedThirdPage ? "complete": ""
+     * If you're using hrefs, it's a good idea to set `state` when appropriate. 
+     */
+     state.reachedThirdPage ? "complete": ""
 }
 
 // ========================================================

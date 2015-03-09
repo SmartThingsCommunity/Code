@@ -25,10 +25,10 @@ metadata {
                         state "on", label: '${name}', action: "switch.off", icon: "st.unknown.zwave.device", backgroundColor: "#79b821"
                         state "off", label: '${name}', action: "switch.on", icon: "st.unknown.zwave.device", backgroundColor: "#ffffff"
                 }
-                standardTile("refresh", "command.refresh", inactiveLabel: false, decoration: "flat") {
+                standardTile("refresh", "command.refresh", decoration: "flat") {
                         state "default", label:'', action:"refresh.refresh", icon:"st.secondary.refresh"
                 }
-                valueTile("battery", "device.battery", inactiveLabel: false, decoration: "flat") {
+                valueTile("battery", "device.battery", decoration: "flat") {
                         state "battery", label:'${currentValue}% battery', unit:""
                 }
                 valueTile("temperature", "device.temperature") {

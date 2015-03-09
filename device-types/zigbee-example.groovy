@@ -39,7 +39,7 @@
         valueTile("power", "device.power", decoration: "flat") {
             state "power", label:'${currentValue} W'
         }
-        standardTile("refresh", "device.power", inactiveLabel: false, decoration: "flat") {
+        standardTile("refresh", "device.power", decoration: "flat") {
             state "default", label:'', action:"refresh.refresh", icon:"st.secondary.refresh"
         }
 

@@ -19,7 +19,7 @@ definition(
     name: "Granny's Faucet",
     namespace: "com.firstbuild",
     author: "SmartThings Hack",
-    description: "Check to see if Granny used the faucet in a 24 hour period and send a notification if she does. Built at Hack The Home in Louisville, KY (4/11/15)",
+    description: "Check to see if Granny used the faucet in a 24 hour period and send a notification if she does.",
     category: "My Apps",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
@@ -28,7 +28,7 @@ definition(
 
 preferences {
     section("Which Faucets?") {
-        input "faucet", "capability.contactSensor", title: "Which faucet?", required:true
+        input "faucet", "capability.accelerationSensor", title: "Which faucet?", required:true
      }
      section("Who to text") {
         input "phone", "phone", title: "Phone number?", required: true  
@@ -53,19 +53,27 @@ def updated() {
 }
 
 def initialize() {
-    subscribe(faucet, "contact.open", faucetHandler)
+     subscribe(faucet, "acceleration.active", faucetActiveHandler)
+     subscribe(faucet, "acceleration.inactive", faucetInactiveHandler)
 }
 
-def faucetHandler(evt) {
+def faucetInactiveHandler(evt) {
+    log.trace "#faucetClosedHandler#"
+    def inputSeconds = 60*minutes.toInteger()
+    log.debug "waiting...$inputSeconds"
+    runIn(inputSeconds, alertMe)
+}
+
+def faucetActiveHandler(evt) {
     // Don't send a continuous stream of text messages
      def inputSeconds = 60*minutes.toInteger()
-    def deltaSeconds = inputSeconds + 1
+    def deltaSeconds = inputSeconds
     def timeAgo = new Date(now() - (1000 * deltaSeconds)) // 61 seconds ago
     def recentEvents = faucet.eventsSince(timeAgo)
     log.trace "Found ${recentEvents?.size() ?: 0} events in the last $deltaSeconds seconds"
      log.debug "Recent Events $recentEvents.value"
     def alreadySentSms = recentEvents.count { 
-        it.value.contains("open")
+        it.value && it.value == "active"
         } > 1
     
     if (alreadySentSms) {
@@ -73,15 +81,20 @@ def faucetHandler(evt) {
     } else {
         //  
         sendSms(phone, "Grandma opened faucet")
-        state.lastOpened.date = new Date().getTime()
+        state.lastOpened.date = now()
         log.debug "Grandma Opened Faucet: $state.lastOpened"
-        runIn(60*inputSeconds, alertMe)
+
     }   
 }
 
 def alertMe() {
-     log.debug "#alertMe: last: ${state.lastOpened.date} , now: ${now()} "
-    if ( now() > state.lastOpened.date ) {
+    log.trace "#alerting...#"
+     def targetTime = state.lastOpened.date + minutes.toInteger()*60*1000
+     log.debug "#alertMe: last: ${state.lastOpened.date} , now: ${now()}, targetTime: ${targetTime}} "
+    if ( now() > targetTime ){
+            log.debug "Grandma needs water badly"
             sendSms(phone, "Grandma needs water badly")     
-    } 
+    } else {
+        log.debug "Grandma's aight!"
+    }
 }

@@ -1,4 +1,4 @@
-/**
+i/**
  *  Weather Underground PWS Connect
  *
  *  Copyright 2015 Andrew Mager
@@ -57,8 +57,8 @@ def initialize() {
             "ID": weatherID,
             "PASSWORD": "smartweather",
             "dateutc": "now",
-            "tempf": temp,
-            "humidity": "73",
+            "tempf": temp.currentTemperature,
+            "humidity": humidity.currentHumidity,
             "action": "updateraw"
         ]
     ]

@@ -1,4 +1,4 @@
-i/**
+/**
  *  Weather Underground PWS Connect
  *
  *  Copyright 2015 Andrew Mager
@@ -32,6 +32,7 @@ preferences {
     }
     section("Configure your Weather Underground credentials") {
         input "weatherID", "text", title: "Weather Station ID", required: true
+        input "password", "password", title: "Weather Underground password", required: true
 
     }
 }
@@ -55,7 +56,7 @@ def initialize() {
         path: "/weatherstation/updateweatherstation.php",
         query: [
             "ID": weatherID,
-            "PASSWORD": "smartweather",
+            "PASSWORD": password,
             "dateutc": "now",
             "tempf": temp.currentTemperature,
             "humidity": humidity.currentHumidity,
@@ -63,6 +64,7 @@ def initialize() {
         ]
     ]
 
+    // TODO: Use runEvery10Minutes() somehow
     getCurrentWeather(params)
 }
 

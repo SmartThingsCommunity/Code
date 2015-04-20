@@ -65,14 +65,11 @@ def initialize() {
     ]
 
     // TODO: Use runEvery10Minutes() somehow
-    getCurrentWeather(params)
+    updateCurrentWeather(params)
 }
 
 
-def getCurrentWeather(params) {
-    
-    log.debug "The current temp is: ${temp.currentTemperature}"
-    log.debug "The current humidity is: ${humidity.currentHumidity}"
+def updateCurrentWeather(params) {
     
     try {
         httpGet(params) { resp ->   

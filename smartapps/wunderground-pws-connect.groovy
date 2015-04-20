@@ -51,6 +51,13 @@ def updated() {
 
 def initialize() {
     
+    runEvery10Minutes(updateCurrentWeather)
+    
+}
+
+
+def updateCurrentWeather() {
+    
     def params = [
         uri: "http://weatherstation.wunderground.com",
         path: "/weatherstation/updateweatherstation.php",
@@ -63,13 +70,6 @@ def initialize() {
             "action": "updateraw"
         ]
     ]
-
-    // TODO: Use runEvery10Minutes() somehow
-    updateCurrentWeather(params)
-}
-
-
-def updateCurrentWeather(params) {
     
     try {
         httpGet(params) { resp ->   

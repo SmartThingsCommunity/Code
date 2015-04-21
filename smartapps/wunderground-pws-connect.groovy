@@ -71,12 +71,14 @@ def updateCurrentWeather() {
         ]
     ]
     
-    try {
-        httpGet(params) { resp ->   
-            log.debug "response data: ${resp.data}"
+    if (temp.currentTemperature) {
+        try {
+            httpGet(params) { resp ->   
+                log.debug "response data: ${resp.data}"
+            }
+        } catch (e) {
+            log.error "something went wrong: $e"
         }
-    } catch (e) {
-        log.error "something went wrong: $e"
     }
 
 }

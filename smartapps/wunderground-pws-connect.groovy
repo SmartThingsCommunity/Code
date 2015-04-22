@@ -75,7 +75,8 @@ def updateCurrentWeather() {
             "tempf": temp.currentTemperature,
             "humidity": humidity.currentHumidity,
             "dewptf": calculateDewPoint(temp.currentTemperature, humidity.currentHumidity),
-            "action": "updateraw"
+            "action": "updateraw",
+            "softwaretype": "SmartThings"
         ]
     ]
     
@@ -93,6 +94,6 @@ def updateCurrentWeather() {
 
 
 def calculateDewPoint(t, rh) {
-    def dp = 243.04 * ( Math.log(rh/100) + ((17.625 * t) / (243.04 + t))) / (17.625-Math.log(rh/100) - ((17.625 * t) / (243.04 + t))) 
+    def dp = 243.04 * ( Math.log(rh / 100) + ( (17.625 * t) / (243.04 + t) ) ) / (17.625 - Math.log(rh / 100) - ( (17.625 * t) / (243.04 + t) ) ) 
     return new DecimalFormat("##.##").format(dp)
 }

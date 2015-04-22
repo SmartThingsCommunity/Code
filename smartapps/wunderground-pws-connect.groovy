@@ -13,6 +13,9 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
+ 
+import java.text.DecimalFormat
+ 
 definition(
     name: "Weather Underground PWS Connect",
     namespace: "co.mager",
@@ -53,6 +56,10 @@ def initialize() {
     
     runEvery10Minutes(updateCurrentWeather)
     
+    log.trace "Temp: " + temp.currentTemperature
+    log.trace "Humidity: " + humidity.currentHumidity
+    log.trace "Dew Point: " + calculateDewPoint(temp.currentTemperature, humidity.currentHumidity)
+
 }
 
 
@@ -67,6 +74,7 @@ def updateCurrentWeather() {
             "dateutc": "now",
             "tempf": temp.currentTemperature,
             "humidity": humidity.currentHumidity,
+            "dewptf": calculateDewPoint(temp.currentTemperature, humidity.currentHumidity),
             "action": "updateraw"
         ]
     ]
@@ -81,4 +89,10 @@ def updateCurrentWeather() {
         }
     }
 
+}
+
+
+def calculateDewPoint(t, rh) {
+    def dp = 243.04 * ( Math.log(rh/100) + ((17.625 * t) / (243.04 + t))) / (17.625-Math.log(rh/100) - ((17.625 * t) / (243.04 + t))) 
+    return new DecimalFormat("##.##").format(dp)
 }

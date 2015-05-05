@@ -19,15 +19,12 @@ definition(
     author: "Andrew Mager, Jack Chi",
     description: "Use Twitter to Chnage Hue Color",
     category: "SmartThings Internal",
-        iconUrl: "http://www.newsroom.immi.gov.au/assets/images/icons/logos/icon-twitterLogo.png",
+    iconUrl: "http://www.newsroom.immi.gov.au/assets/images/icons/logos/icon-twitterLogo.png",
     iconX2Url: "http://www.amstevenson.net/images/icons/twitterblue.png",
     iconX3Url: "https://g.twimg.com/Twitter_logo_blue.png",
     oauth: true)
 
 preferences {
-  section("Allow External Service to Control These Things...") {
-    input "light1", "capability.switch", title: "Pick switch #1", required: false
-  }
   section("Control these hue bulbs...") {
     input "hues", "capability.colorControl", title: "Which Hue Bulbs?", required:false, multiple:true
   }
@@ -37,12 +34,6 @@ preferences {
 /* This block defines which functions will fire when you hit certain endpoints. */
 
 mappings {
-  path("/switch") {
-    action: [
-      GET: "getSwitch",
-      PUT: "setSwitch",
-    ]
-  }
   path("/hue") {
   	action: [
   		PUT: "postHue"
@@ -67,35 +58,21 @@ def initialize() {
 
 }
 
-def getSwitch() {
-    light1.currentState("switch")
-}
-
-def setSwitch() {
-    // params.someAttribute  ?someAttribute=XXX
-    if (request.JSON.value == "on") {
-        light1.on()
-    }
-    else if (request.JSON.value == "off") {
-        light1.off()
-    }
-    else {
-        log.error "Invalid value: $request.JSON.value"
-    }
-}
-
 /**
 * Body: { color=[yourcolor] } to change color
-* Example: {
-*            "value" : " #smartthings is so color=blue"
-*          }
+* Example:
+*     {
+*          "value" : " #smartthings is so color=blue"
+*     }
 */
+
 def postHue() {
 	def tweetText = request.JSON.value
 	log.info "POST: $tweetText"
     
     try {
-    	def tweetColor = (tweetText =~ /color=(\w+)/)[0][1].toLowerCase() 
+    	def tweetColor = (tweetText =~ /color=(\w+)/)[0][1].toLowerCase()
+    	log.debug (tweetText =~ /color=(\w+)/)
         setHueColor(tweetColor)     
     }
 	catch (any) {

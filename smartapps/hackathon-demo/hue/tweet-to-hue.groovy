@@ -1,7 +1,7 @@
 /**
- *  Twitter Hue
+ *  Tweet to Hue
  *
- *  Copyright 2015 Andrew Mager (mager@smartthings.com) / Jack Chi (jack@smartthings.com)
+ *  Copyright 2015 Andrew Mager & Kris Schaller
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at:
@@ -14,15 +14,16 @@
  *
  */
 definition(
-    name: "Twitter Hue",
-    namespace: "mager",
-    author: "Andrew Mager, Jack Chi",
-    description: "Use Twitter to Chnage Hue Color",
-    category: "SmartThings Internal",
-    iconUrl: "http://www.newsroom.immi.gov.au/assets/images/icons/logos/icon-twitterLogo.png",
-    iconX2Url: "http://www.amstevenson.net/images/icons/twitterblue.png",
-    iconX3Url: "https://g.twimg.com/Twitter_logo_blue.png",
+    name: "Tweet to Hue",
+    namespace: "com.smartthings.dev",
+    author: "Andrew Mager & Kris Schaller",
+    description: "Update a Hue bulb's color based on a tweet.",
+    category: "Fun & Social",
+    iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
+    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
+    iconX3Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
     oauth: true)
+
 
 preferences {
   section("Control these hue bulbs...") {
@@ -35,23 +36,23 @@ preferences {
 
 mappings {
   path("/hue") {
-  	action: [
-  		PUT: "postHue"
-  	]
+    action: [
+        PUT: "postHue"
+    ]
   }
 }
 
 def installed() {
-	log.debug "Installed with settings: ${settings}"
+    log.debug "Installed with settings: ${settings}"
 
-	initialize()
+    initialize()
 }
 
 def updated() {
-	log.debug "Updated with settings: ${settings}"
+    log.debug "Updated with settings: ${settings}"
 
-	unsubscribe()
-	initialize()
+    unsubscribe()
+    initialize()
 }
 
 def initialize() {
@@ -67,67 +68,67 @@ def initialize() {
 */
 
 def postHue() {
-	def tweetText = request.JSON.value
-	log.info "POST: $tweetText"
+    def tweetText = request.JSON.text
+    log.info "POST: $tweetText"
     
     try {
-    	def tweetColor = (tweetText =~ /color=(\w+)/)[0][1].toLowerCase()
-    	log.debug (tweetText =~ /color=(\w+)/)
+        def tweetColor = (tweetText =~ /color=(\w+)/)[0][1].toLowerCase()
+        log.debug (tweetText =~ /color=(\w+)/)
         setHueColor(tweetColor)     
     }
-	catch (any) {
-    	log.trace "POST: Check Body (e.g: @RT: #smartthings color=red)"
+    catch (any) {
+        log.trace "POST: Check Body (e.g: @RT: #smartthings color=red)"
      }    
 }
 
 private setHueColor(color) {
 
-	def hueColor = 0
-	def saturation = 100
+    def hueColor = 0
+    def saturation = 100
 
-	switch(color) {
-		case "white":
-			hueColor = 52
-			saturation = 19
-			break;
-		case "blue":
-			hueColor = 70
-			break;
-		case "green":
-			hueColor = 39
-			break;
-		case "yellow":
-			hueColor = 25
-			break;
-		case "orange":
-			hueColor = 10
-			break;
-		case "purple":
-			hueColor = 75
-			break;
-		case "pink":
-			hueColor = 83
-			break;
-		case "red":
-			hueColor = 100
-			break;
-	}
+    switch(color) {
+        case "white":
+            hueColor = 52
+            saturation = 19
+            break;
+        case "blue":
+            hueColor = 70
+            break;
+        case "green":
+            hueColor = 39
+            break;
+        case "yellow":
+            hueColor = 25
+            break;
+        case "orange":
+            hueColor = 10
+            break;
+        case "purple":
+            hueColor = 75
+            break;
+        case "pink":
+            hueColor = 83
+            break;
+        case "red":
+            hueColor = 100
+            break;
+    }
 
-	state.previous = [:]
+    state.previous = [:]
 
-	hues.each {
-		state.previous[it.id] = [
-			"switch": it.currentValue("switch"),
-			"level" : it.currentValue("level"),
-			"hue": it.currentValue("hue"),
-			"saturation": it.currentValue("saturation")
-		]
-	}
+    hues.each {
+        state.previous[it.id] = [
+            "switch": it.currentValue("switch"),
+            "level" : it.currentValue("level"),
+            "hue": it.currentValue("hue"),
+            "saturation": it.currentValue("saturation")
+        ]
+    }
 
-	log.debug "current values = $state.previous"
+    log.debug "current values = $state.previous"
 
-	def newValue = [hue: hueColor, saturation: saturation, level: 100]
-	log.debug "new value = $newValue"
+    def newValue = [hue: hueColor, saturation: saturation, level: 100]
+    log.debug "new value = $newValue"
 
-	hues*.setColor(newValue)
+    hues*.setColor(newValue)
 }

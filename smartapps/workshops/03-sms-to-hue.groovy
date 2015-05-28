@@ -1,5 +1,5 @@
 /**
- *  Tweet to Hue
+ *  SMS to Hue
  *
  *  Copyright 2015 Andrew Mager & Kris Schaller
  *
@@ -14,10 +14,10 @@
  *
  */
 definition(
-    name: "[Workshop Demo] Tweet to Hue",
+    name: "[Workshop Demo] SMS to Hue",
     namespace: "com.smartthings.dev",
-    author: "Andrew Mager & Kris Schaller",
-    description: "Update a Hue bulb's color based on a tweet.",
+    author: "Andrew Mager & Jim Anderson",
+    description: "Update a Hue bulb's color based on a SMS.",
     category: "Fun & Social",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
@@ -60,7 +60,6 @@ def postHue() {
       key for the value that we're looking for. It's the body of the tweet.
     */
     def tweetText = request.JSON?.text
-    log.info "POST: $tweetText"
     
     try {
         // Finds the text "color=[colorname]" and parses out the color name

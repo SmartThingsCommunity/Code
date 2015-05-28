@@ -30,7 +30,6 @@ preferences {
         // Inputs assign variables to a group of physical devices
         input "contact", "capability.contactSensor", title: "Select a contact sensor", multiple: false
         input "light", "capability.switch", title: "Select a light or outlet", required: true
-        input "lock", "capability.lock", title: "Select a lock"
     }
 }
 
@@ -67,5 +66,4 @@ def closedHandler(evt) {
     log.debug "$evt.name: $evt.value"
     // Turn the light off and lock the lock
     light.off()
-    lock.lock()
 }

@@ -1,7 +1,7 @@
 /**
- *  SMS to Hue
+ *  [Workshop Demo] SMS to Hue
  *
- *  Copyright 2015 Andrew Mager & Kris Schaller
+ *  Copyright 2015 Andrew Mager
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at:
@@ -16,9 +16,9 @@
 definition(
     name: "[Workshop Demo] SMS to Hue",
     namespace: "com.smartthings.dev",
-    author: "Andrew Mager & Jim Anderson",
-    description: "Update a Hue bulb's color based on a SMS.",
-    category: "Fun & Social",
+    author: "Andrew Mager",
+    description: "Change the color of Hue bulbs from an SMS.",
+    category: "My Apps",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
     iconX3Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
@@ -59,16 +59,15 @@ def postHue() {
       "request.JSON?" checks to make sure that the object exists. And ".text" is the
       key for the value that we're looking for. It's the body of the tweet.
     */
-    def tweetText = request.JSON?.text
+    def color = (request.JSON?.value).toLowerCase()
     
     try {
         // Finds the text "color=[colorname]" and parses out the color name
-        def tweetColor = (tweetText =~ /color=(\w+)/)[0][1].toLowerCase()
-        setHueColor(tweetColor)     
+        setHueColor(color)     
     }
     catch (any) {
-        log.trace "POST: Check Body (e.g: @RT: #smartthings color=red)"
-     }    
+        log.trace "Something went wrong."
+    }    
 }
 
 

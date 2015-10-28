@@ -48,11 +48,6 @@ mappings {
 // [[name: "kitchen lamp", value: "off"], [name: "bathroom", value: "on"]]
 def listSwitches() {
 
-    def status
-    def contentType
-    def data
-    def headers = [:]
-
     def resp = []
     switches.each {
         resp << [name: it.displayName, value: it.currentValue("switch")]

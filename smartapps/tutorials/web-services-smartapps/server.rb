@@ -12,7 +12,7 @@ CLIENT_SECRET = ENV['ST_CLIENT_SECRET']
 # We'll store the access token in the session
 use Rack::Session::Pool, :cookie_only => false
 
-# This is the URI that will be called with our access 
+# This is the URI that will be called with our access
 # code after we authenticate with our SmartThings account
 redirect_uri = 'http://localhost:4567/oauth/callback'
 
@@ -103,11 +103,11 @@ get '/getswitch' do
   puts json
 
   # get the endpoint from the JSON:
-  endpoint = json[0]['url']
+  uri = json[0]['uri']
 
   # now we can build a URL to our WebServices SmartApp
   # we will make a GET request to get information about the switch
-  switchUrl = 'https://graph.api.smartthings.com' + endpoint + '/switches?access_token=' + token
+  switchUrl = uri + '/switches?access_token=' + token
 
   # debug
   puts "SWITCH ENDPOINT: " + switchUrl

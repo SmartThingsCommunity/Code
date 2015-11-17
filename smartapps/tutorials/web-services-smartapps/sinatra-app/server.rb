@@ -60,6 +60,8 @@ get '/oauth/callback' do
   # This is the code we can use to get our access token
   code = params[:code]
 
+  puts 'headers: ' + headers.to_hash.inspect
+
   # Use the code to get the token.
   response = client.auth_code.get_token(code, redirect_uri: redirect_uri, scope: 'app')
 
@@ -107,15 +109,16 @@ get '/getswitch' do
 
   # now we can build a URL to our WebServices SmartApp
   # we will make a GET request to get information about the switch
-  switchUrl = uri + '/switches?access_token=' + token
+  switchUrl = uri + '/switches'
 
   # debug
   puts "SWITCH ENDPOINT: " + switchUrl
 
   getSwitchURL = URI.parse(switchUrl)
   getSwitchReq = Net::HTTP::Get.new(getSwitchURL.request_uri)
+  getSwitchReq['Authorization'] = 'Bearer ' + token
 
-  getSwitchHttp = Net::HTTP.new(url.host, url.port)
+  getSwitchHttp = Net::HTTP.new(getSwitchURL.host, getSwitchURL.port)
   getSwitchHttp.use_ssl = true
 
   switchStatus = getSwitchHttp.request(getSwitchReq)

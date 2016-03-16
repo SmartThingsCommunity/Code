@@ -12,7 +12,7 @@ CLIENT_SECRET = ENV['ST_CLIENT_SECRET']
 # We'll store the access token in the session
 use Rack::Session::Pool, :cookie_only => false
 
-# This is the URI that will be called with our access 
+# This is the URI that will be called with our access
 # code after we authenticate with our SmartThings account
 redirect_uri = 'http://localhost:4567/oauth/callback'
 
@@ -60,6 +60,8 @@ get '/oauth/callback' do
   # This is the code we can use to get our access token
   code = params[:code]
 
+  puts 'headers: ' + headers.to_hash.inspect
+
   # Use the code to get the token.
   response = client.auth_code.get_token(code, redirect_uri: redirect_uri, scope: 'app')
 
@@ -103,19 +105,20 @@ get '/getswitch' do
   puts json
 
   # get the endpoint from the JSON:
-  endpoint = json[0]['url']
+  uri = json[0]['uri']
 
   # now we can build a URL to our WebServices SmartApp
   # we will make a GET request to get information about the switch
-  switchUrl = 'https://graph.api.smartthings.com' + endpoint + '/switches?access_token=' + token
+  switchUrl = uri + '/switches'
 
   # debug
   puts "SWITCH ENDPOINT: " + switchUrl
 
   getSwitchURL = URI.parse(switchUrl)
   getSwitchReq = Net::HTTP::Get.new(getSwitchURL.request_uri)
+  getSwitchReq['Authorization'] = 'Bearer ' + token
 
-  getSwitchHttp = Net::HTTP.new(url.host, url.port)
+  getSwitchHttp = Net::HTTP.new(getSwitchURL.host, getSwitchURL.port)
   getSwitchHttp.use_ssl = true
 
   switchStatus = getSwitchHttp.request(getSwitchReq)

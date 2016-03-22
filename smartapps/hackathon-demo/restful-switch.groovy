@@ -1,7 +1,7 @@
 /**
  *  Control a Switch with an API call
  *
- *  Copyright 2014 Andrew Mager
+ *  Copyright 2015 SmartThings
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at:
@@ -15,8 +15,8 @@
  */
 definition(
     name: "Control a Switch with an API call",
-    namespace: "co.mager",
-    author: "Andrew Mager",
+    namespace: "smartthings",
+    author: "SmartThings",
     description: "V2 of 'RESTful Switch' example. Trying to make OAuth work properly.",
     category: "My Apps",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",

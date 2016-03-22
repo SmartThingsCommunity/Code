@@ -18,6 +18,12 @@ metadata {
                 status "temperature report 70°F" : zwave.sensorMultilevelV2.sensorMultilevelReport(scaledSensorValue: 70.0, precision: 1, sensorType: 1, scale: 1).incomingMessage()
                 status "low battery alert"               : zwave.batteryV1.batteryReport(batteryLevel:0xFF).incomingMessage()
                 status "multichannel sensor"     : zwave.multiChannelV3.multiChannelCmdEncap(sourceEndPoint:1, destinationEndPoint:1).encapsulate(zwave.sensorBinaryV1.sensorBinaryReport(sensorValue:0)).incomingMessage()
+
+                // turn on            
+                reply "2001FF,delay 5000,2002": "command: 2503, payload: FF"
+
+                // turn off
+                reply "200100,delay 5000,2002": "command: 2503, payload: 00"                
         }
 
         tiles {
@@ -25,10 +31,10 @@ metadata {
                         state "on", label: '${name}', action: "switch.off", icon: "st.unknown.zwave.device", backgroundColor: "#79b821"
                         state "off", label: '${name}', action: "switch.on", icon: "st.unknown.zwave.device", backgroundColor: "#ffffff"
                 }
-                standardTile("refresh", "command.refresh", inactiveLabel: false, decoration: "flat") {
+                standardTile("refresh", "command.refresh", decoration: "flat") {
                         state "default", label:'', action:"refresh.refresh", icon:"st.secondary.refresh"
                 }
-                valueTile("battery", "device.battery", inactiveLabel: false, decoration: "flat") {
+                valueTile("battery", "device.battery", decoration: "flat") {
                         state "battery", label:'${currentValue}% battery', unit:""
                 }
                 valueTile("temperature", "device.temperature") {

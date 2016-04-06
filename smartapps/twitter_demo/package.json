@@ -1,0 +1,21 @@
+{
+  "name": "st-oauth",
+  "version": "1.0.0",
+  "description": "example of communicating with a Web Services SmartApp",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jim Anderson",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^1.17.1",
+    "date-utils": "^1.2.17",
+    "express": "^4.13.3",
+    "express-session": "^1.12.1",
+    "jsdoc": "^3.4.0",
+    "querystring": "^0.2.0",
+    "request": "^2.67.0",
+    "twitter": "^1.2.5"
+  }
+}

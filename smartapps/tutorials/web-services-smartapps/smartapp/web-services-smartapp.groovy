@@ -59,21 +59,20 @@ void updateSwitches() {
     // use the built-in request object to get the command parameter
     def command = params.command
 
-    if (command) {
-
-        // check that the switch supports the specified command
-        // If not, return an error using httpError, providing a HTTP status code.
-        switches.each {
-            if (!it.hasCommand(command)) {
-                httpError(501, "$command is not a valid command for all switches specified")
-            } 
-        }
-        
-        // all switches have the comand
-        // execute the command on all switches
-        // (note we can do this on the array - the command will be invoked on every element
-        switches."$command"()
+    // all switches have the comand
+    // execute the command on all switches
+    // (note we can do this on the array - the command will be invoked on every element
+    switch(command) {
+        case "on":
+            switches.on()
+            break
+        case "off":
+            switches.off()
+            break
+        default:
+            httpError(400, "$command is not a valid command for all switches specified")
     }
+
 }
 def installed() {}
 

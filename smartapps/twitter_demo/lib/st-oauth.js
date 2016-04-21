@@ -5,7 +5,7 @@ require('date-utils');
 var querystring = require('querystring');
 var request = require('request');
 
-var AUTH_HOST = "https://graph-na01t-useast1.smartthingsgdev.com";
+var AUTH_HOST = "https://graph.api.smartthings.com";
 var AUTH_PATH = "/oauth/authorize";
 var TOKEN_PATH = "/oauth/token";
 var ENDPOINT_PATH = "/api/smartapps/endpoints";

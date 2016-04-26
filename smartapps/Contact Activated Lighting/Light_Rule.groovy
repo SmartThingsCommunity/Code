@@ -19,7 +19,7 @@ definition(
     author: "Tim Slagle",
     description: "Light rule child app for \"Motion Activated Light\"",
     category: "Convenience",
-    parent: "tslagle13:Motion Activated Lighting",
+    parent: "tslagle13:Contact Activated Lighting",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
     iconX3Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png")

@@ -93,7 +93,7 @@ def contactHandler(evt){
     log.debug evt.date
     log.debug evt.isStateChange()
     
-    if (evt.value == "active") {
+    if (evt.value == "open") {
     	turnLightOn()
     }
     else if (contactInactive) {

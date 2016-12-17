@@ -94,10 +94,10 @@ def updateSwitch() {
 def doCommand(theSwitch, command) {
     if (command == "toggle") {
         if (theSwitch.currentSwitch == "on") {
-            log.debug "will try and turn switch ${theSwitch.displayName} on"
+            log.debug "will try and turn switch ${theSwitch.displayName} off"
             theSwitch.off()
         } else {
-            log.debug "will try and turn switch ${theSwitch.displayName} off"
+            log.debug "will try and turn switch ${theSwitch.displayName} on"
             theSwitch.on()
         }
     } else if (command == "on" || command == "off") {
